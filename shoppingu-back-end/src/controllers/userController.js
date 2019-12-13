@@ -1,5 +1,5 @@
-const sequelize = require("../orm")
-const { userModal } = require("../modals");
+const sequelize = require("../dbconfig")
+// const { userModel } = require("../models");
 
 module.exports = {
   getUser: (req, res, next) => {
