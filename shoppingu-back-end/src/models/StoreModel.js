@@ -1,17 +1,17 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('../dbconfig')
 
-class UserTypeModel extends Model {}
-UserTypeModel.init(
+class StoreModel extends Model {}
+StoreModel.init(
   {
-    type_name: {
-      type: DataTypes.STRING,
+    is_active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
-    type_code: {
+    store_detail: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -19,7 +19,7 @@ UserTypeModel.init(
       }
     }
   },
-  { sequelize, modelName: 'user_type' }
+  { sequelize, modelName: 'store' }
 )
 
-module.exports = { UserTypeModel }
+module.exports = { StoreModel }

@@ -1,1 +1,1 @@
-module.exports = { ...require("./cloneObjectWithoutFuntion") }
+module.exports = { ...require('./cloneObjectWithoutFuntion') }

@@ -1,8 +1,7 @@
-const sequelize = require("../dbconfig")
-// const { userModel } = require("../models");
+// const sequelize = require('../dbconfig')
 
 module.exports = {
   getUser: (req, res, next) => {
-    res.status(200).json({ result: [], massages: [] });
+    res.status(200).json({ result: [], massages: [] })
   }
-};
+}

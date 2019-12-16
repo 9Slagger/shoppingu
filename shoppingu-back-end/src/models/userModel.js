@@ -1,10 +1,8 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../dbconfig");
-const { userTypeModel } = require("./userTypeModel");
-const { shippingAddressModel } = require("./shippingAddressModel");
+const { Model, DataTypes } = require('sequelize')
+const sequelize = require('../dbconfig')
 
-class userModel extends Model {}
-userModel.init(
+class UserModel extends Model {}
+UserModel.init(
   {
     email: {
       type: DataTypes.STRING,
@@ -49,10 +47,7 @@ userModel.init(
       validate: {}
     }
   },
-  { sequelize, modelName: "user" }
-);
+  { sequelize, modelName: 'user' }
+)
 
-// userModel.belongsTo(userTypeModel, { foreignKey: "userTypeId" });
-// userModel.hasMany(shippingAddressModel, {foreignKey: "userId"});
-
-module.exports = { userModel };
+module.exports = { UserModel }

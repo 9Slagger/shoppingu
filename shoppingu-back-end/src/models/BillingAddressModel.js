@@ -1,8 +1,8 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('../dbconfig')
 
-class ShippingAddressModel extends Model {}
-ShippingAddressModel.init(
+class BillingAddressModel extends Model {}
+BillingAddressModel.init(
   {
     address_detail: {
       type: DataTypes.STRING,
@@ -40,7 +40,7 @@ ShippingAddressModel.init(
       }
     }
   },
-  { sequelize, modelName: 'shipping_address' }
+  { sequelize, modelName: 'bill_address' }
 )
 
-module.exports = { ShippingAddressModel }
+module.exports = { BillingAddressModel }
