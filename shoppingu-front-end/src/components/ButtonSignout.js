@@ -1,14 +1,16 @@
 import React from "react";
 import Auth from "../modules/authentication";
-import { useHistory } from "react-router-dom";
-import {Button} from 'antd'
+import { Button } from "antd";
 
-export default function Signout() {
-  const history = useHistory();
+export default function Signout(props) {
   const signout = () => {
     Auth.signout(() => {
-      history.push("/");
+      props.history.push("/");
     });
   };
-  return <Button onClick={signout} type="danger">Sign out</Button>;
+  return (
+    <Button onClick={signout} type="danger">
+      Sign out
+    </Button>
+  );
 }

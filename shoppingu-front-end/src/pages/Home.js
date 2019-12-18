@@ -12,7 +12,7 @@ export default class Home extends Component {
   render() {
     return (
       <Layout>
-        <Header />
+        <Header {...this.props} />
         <Content>
           <p>
             Reprehenderit est non sint officia est et do mollit. Quis anim ad eu

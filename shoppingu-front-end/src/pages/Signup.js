@@ -1,14 +1,12 @@
 import React from 'react'
-import { useHistory } from "react-router-dom";
 
-export default function Signup() {
-  const history = useHistory();
+export default function Signup(props) {
   return (
     <div>
       <h3>Register</h3>
       <button
         onClick={() => {
-          history.goBack();
+          props.history.goBack();
         }}
       >
         back

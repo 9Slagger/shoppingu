@@ -1,26 +1,27 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Card, Input, Icon, Button, Row, Col } from "antd";
 import Swal from "sweetalert2";
 import Auth from "../modules/authentication";
 import serviceApi from "../services/api";
+import Notification from "../components/Notification";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showCheckEmail, setShowCheckEmail] = useState(false);
 
-  const history = useHistory();
 
   const loginByKeyEnter = e => {
     if (e.key === "Enter") login();
   };
+
   const login = async e => {
     if (showCheckEmail && password.length >= 8) {
       try {
         let result = await serviceApi.login({ email, password });
         Auth.signin(result.data, () => {
-          history.goBack()
+          props.history.goBack();
+          Notification("bottomRight");
         });
       } catch (error) {
         Swal.fire({
@@ -39,7 +40,7 @@ const LoginPage = () => {
   };
 
   const signup = () => {
-    history.push("/signup");
+    props.history.push("/signup");
   };
 
   const validateEmail = email => {

@@ -3,12 +3,18 @@ import { Menu, Icon, Layout } from "antd";
 import ButtonSignout from "../components/ButtonSignout";
 
 export default class NavigationBar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+
+    }
+  }
   state = {
     current: "mail"
   };
 
   handleClick = e => {
-    console.log("click ", e);
+    // console.log("click ", e);
     this.setState({
       current: e.key
     });
@@ -60,7 +66,7 @@ export default class NavigationBar extends React.Component {
             </a>
           </Menu.Item>
           <Menu.Item>
-            <ButtonSignout />
+            <ButtonSignout {...this.props} />
           </Menu.Item>
         </Menu>
       </Layout.Header>
