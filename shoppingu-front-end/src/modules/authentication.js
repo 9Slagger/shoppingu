@@ -5,12 +5,12 @@ const Auth = {
   signin: (obj, callback) => {
     Auth.isAuthenticated = true;
     setToken(obj);
-    callback();
+    if (callback) callback();
   },
   signout: callback => {
     Auth.isAuthenticated = false;
     removeToken();
-    callback();
+    if (callback) callback();
   }
 };
 

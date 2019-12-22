@@ -10,6 +10,7 @@ export default class Home extends Component {
     this.state = {};
   }
   render() {
+    console.warn("Home")
     return (
       <Layout>
         <Header {...this.props} />
