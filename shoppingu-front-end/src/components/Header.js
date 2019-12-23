@@ -1,13 +1,12 @@
 import React from "react";
-import { Menu, Icon, Layout } from "antd";
-import ButtonSignout from "../components/ButtonSignout";
+import { connect } from "react-redux";
+import { Menu, Icon, Layout, Button } from "antd";
+import { logout } from "../_actions";
 
-export default class NavigationBar extends React.Component {
+class NavigationBar extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = {
-
-    }
+    super(props);
+    this.state = {};
   }
   state = {
     current: "mail"
@@ -18,6 +17,10 @@ export default class NavigationBar extends React.Component {
     this.setState({
       current: e.key
     });
+  };
+
+  signout = () => {
+    this.props.logout()
   };
 
   render() {
@@ -66,10 +69,18 @@ export default class NavigationBar extends React.Component {
             </a>
           </Menu.Item>
           <Menu.Item>
-            <ButtonSignout {...this.props} />
+            <Button onClick={this.signout} type="danger">
+              Sign out
+            </Button>
           </Menu.Item>
         </Menu>
       </Layout.Header>
     );
   }
 }
+
+const mapStateToProps = ({ Authentication }) => Authentication;
+
+const mapDispatchToProps = { logout };
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

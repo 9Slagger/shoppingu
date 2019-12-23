@@ -1,7 +1,7 @@
 import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory as createHistory } from 'history'
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "../components/PrivateRoute";
 import SigninPage from "../pages/Signin";
 import HomePage from "../pages/Home";
 import SignupPage from "../pages/Signup";

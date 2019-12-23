@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Card, Input, Icon, Button, Row, Col } from "antd";
 import { connect } from "react-redux";
-import { Authentication, login } from "../_actions";
-// import Auth from "../modules/authentication";
-import serviceApi from "../services/api";
+import { login } from "../_actions";
 import Notification from "../components/Notification";
 
 class Signin extends Component {
@@ -15,14 +13,10 @@ class Signin extends Component {
       password: ""
     };
   }
-  login = async e => {
+  signin = async e => {
     if (this.state.showCheckEmail && this.state.password.length >= 8) {
       try {
-        await serviceApi.login({
-          email: this.state.email,
-          password: this.state.password
-        });
-        this.props.login()
+        this.props.login();
       } catch (error) {
         Notification("login fail");
       }
@@ -90,7 +84,7 @@ class Signin extends Component {
               className="mb-1"
               size="large"
               type="danger"
-              onClick={this.login}
+              onClick={this.signin}
             >
               Sign in
             </Button>
@@ -107,6 +101,6 @@ class Signin extends Component {
 
 const mapStateToProps = ({ Authentication }) => Authentication;
 
-const mapDispatchToProps = { Authentication, login };
+const mapDispatchToProps = { login };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

@@ -28,3 +28,17 @@ export const login = (email, password) => {
     }
   };
 };
+
+export const logout = () => {
+  return async dispatch => {
+    dispatch({
+      type: authConstants.AUTHENTICATION_REQUEST
+    })
+    try {
+      await serviceApi.logout()
+      dispatch({ type: authConstants.AUTHENTICATION_SUCCESS });
+    } catch (error) {
+      dispatch({ type: authConstants.AUTHENTICATION_FAILURE });
+    }
+  }
+}
