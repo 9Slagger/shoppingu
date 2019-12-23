@@ -1,21 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, useHistory } from "react-router-dom";
-import { getToken } from "../services/localStorage";
+import { Route, Redirect } from "react-router-dom";
+import { getToken } from "../_services/localStorage";
 
-const PrivateRoute = ({ component: Component, Authentication, ...rest }) => {
-  const history = useHistory();
+const PrivateRoute = ({
+  component: Component,
+  location,
+  Authentication,
+  ...rest
+}) => {
   return (
     <Route
+      render={props =>
+        getToken() ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: '/signin', state: { from: props.location } }} />
+        )
+      }
       {...rest}
-      // render={props =>
-      //   !!getToken() ? (
-      //     <Component {...props} />
-      //   ) : (
-      //     history.push("/signin")
-      //   )
-      // }
-      component={!!getToken() ? Component : history.push("/signin")}
     />
   );
 };

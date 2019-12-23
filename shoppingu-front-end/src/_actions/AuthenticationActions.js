@@ -1,5 +1,5 @@
 import { AUTHENTICATION_SUCESS, authConstants } from "./type";
-import serviceApi from "../services/api";
+import serviceApi from "../_services/api";
 import { history } from "../routers";
 
 export const Authentication = () => {
