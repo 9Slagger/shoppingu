@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Card, Input, Icon, Button, Row, Col } from "antd";
 import { connect } from "react-redux";
-import { login } from "../_actions";
+import { signin } from "../_actions";
 import Notification from "../components/Notification";
 
 class Signin extends Component {
@@ -16,16 +16,16 @@ class Signin extends Component {
   signin = async e => {
     if (this.state.showCheckEmail && this.state.password.length >= 8) {
       try {
-        this.props.login();
+        this.props.signin();
       } catch (error) {
-        Notification("login fail");
+        Notification("signin fail");
       }
     } else {
       Notification("กรุณากรอก email และ password ให้ครบถ้วน");
     }
   };
-  loginByKeyEnter = e => {
-    if (e.key === "Enter") this.login();
+  signinByKeyEnter = e => {
+    if (e.key === "Enter") this.signin();
   };
   signup = () => {
     this.props.history.push("/signup");
@@ -60,7 +60,7 @@ class Signin extends Component {
               value={email}
               name="email"
               onChange={this.handleChange}
-              onKeyUp={this.loginByKeyEnter}
+              onKeyUp={this.signinByKeyEnter}
             />
             <Input
               id="password"
@@ -77,7 +77,7 @@ class Signin extends Component {
               value={password}
               name="password"
               onChange={this.handleChange}
-              onKeyUp={this.loginByKeyEnter}
+              onKeyUp={this.signinByKeyEnter}
             />
             <Button
               style={{ width: 150 }}
@@ -101,6 +101,6 @@ class Signin extends Component {
 
 const mapStateToProps = ({ Authentication }) => Authentication;
 
-const mapDispatchToProps = { login };
+const mapDispatchToProps = { signin };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

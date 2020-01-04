@@ -1,3 +1,9 @@
+div.product-card {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #root {
   min-height: 100%;
   position: relative;

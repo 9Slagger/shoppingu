@@ -3,26 +3,36 @@
 import { removeToken, setToken } from "./localStorage";
 
 const serviceApi = {
-  login: obj =>
+  signin: obj =>
     new Promise(async (resolve, reject) => {
-      setToken({ data: "JKASBDKJASBDKJ" })
-      resolve({ data: "JKASBDKJASBDKJ" });
+      const mock = {
+        data: {
+          token: "SADNJKFBN",
+          id: 1,
+          role: "USER",
+          firstName: "Akkarapong",
+          lastName: "Khamtanet",
+          profileImage: ""
+        }
+      };
+      setToken(JSON.stringify(mock));
+      resolve(mock);
     }),
-  // login: obj =>
+  // signin: obj =>
   //   new Promise(async (resolve, reject) => {
   //     let result;
   //     try {
-  //       result = await axios.post(`${ENDPOINT}/user/login`, obj);
+  //       result = await axios.post(`${ENDPOINT}/user/signin`, obj);
   //       localStorage.setItem('token', result.data);
   //       resolve(result);
   //     } catch (error) {
   //       reject(error);
   //     }
   //   })
-  logout: () =>
+  signout: () =>
     new Promise(async (resolve, reject) => {
-      removeToken()
-      resolve()
+      removeToken();
+      resolve();
     })
 };
 

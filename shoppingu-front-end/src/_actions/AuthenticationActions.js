@@ -1,44 +1,36 @@
-import { AUTHENTICATION_SUCESS, authConstants } from "./type";
+import { authConstants } from "./type";
 import serviceApi from "../_services/api";
+// import { push } from 'connected-react-router'
 import { history } from "../routers";
 
-export const Authentication = () => {
-  return dispatch => {
-    dispatch({
-      type: AUTHENTICATION_SUCESS,
-      payload: { item: { isAuthenticated: true } }
-    });
-  };
-};
-
-export const login = (email, password) => {
+export const signin = (email, password) => {
   return async dispatch => {
     dispatch({
-      type: authConstants.AUTHENTICATION_REQUEST
+      type: authConstants.SIGNIN_REQUEST
     });
     try {
-      const { data } = await serviceApi.login({
+      const { data } = await serviceApi.signin({
         email,
         password
       });
-      dispatch({ type: authConstants.AUTHENTICATION_SUCCESS, payload: data });
-      history.push("/");
+      dispatch({ type: authConstants.SIGNIN_SUCCESS, payload: data });
+      history.push(history.location.state.from);
     } catch (error) {
-      dispatch({ type: authConstants.AUTHENTICATION_FAILURE });
+      dispatch({ type: authConstants.SIGNIN_FAILURE });
     }
   };
 };
 
-export const logout = () => {
+export const signout = () => {
   return async dispatch => {
     dispatch({
-      type: authConstants.AUTHENTICATION_REQUEST
+      type: authConstants.SIGNOUT_REQUEST
     })
     try {
-      await serviceApi.logout()
-      dispatch({ type: authConstants.AUTHENTICATION_SUCCESS });
+      await serviceApi.signout()
+      dispatch({ type: authConstants.SIGNOUT_SUCCESS });
     } catch (error) {
-      dispatch({ type: authConstants.AUTHENTICATION_FAILURE });
+      dispatch({ type: authConstants.SIGNOUT_FAILURE });
     }
   }
 }
