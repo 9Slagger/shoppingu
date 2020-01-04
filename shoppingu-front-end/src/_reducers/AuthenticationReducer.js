@@ -28,7 +28,7 @@ const getStatus = Status => {
 export default function(state = initialState, { type, payload }) {
   switch (type) {
     case authConstants.SIGNIN_REQUEST:
-      return { ...payload, ...getStatus() };
+      return { ...state,...payload, ...getStatus() };
     case authConstants.SIGNIN_SUCCESS:
       const { id, role, firstName, lastName, profileImage } = payload;
       const fullName = `${firstName} ${lastName}`;
@@ -51,6 +51,7 @@ export default function(state = initialState, { type, payload }) {
       return { ...state, ...getStatus() };
     case authConstants.SIGNOUT_SUCCESS:
       return {
+        ...state,
         item: {
           isAuthenticated: false
         },

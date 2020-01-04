@@ -54,7 +54,7 @@ class NavigationBar extends React.Component {
       <>
         <Input
           id="email"
-          style={{width: 200}}
+          style={{ width: 200 }}
           className="ml-1"
           placeholder="Enter your email"
           type="text"
@@ -70,7 +70,7 @@ class NavigationBar extends React.Component {
           onKeyUp={this.signinByKeyEnter}
         />
         <Input
-        style={{width: 200}}
+          style={{ width: 200 }}
           id="password"
           className="ml-1"
           placeholder="Enter your password"
@@ -150,7 +150,8 @@ class NavigationBar extends React.Component {
               <Menu.Item style={{ float: "right" }}>
                 {Authentication.item.isAuthenticated
                   ? this.renderSignoutBox()
-                  : this.renderSigninBox()}
+                  : this.renderSigninBox()
+                }
               </Menu.Item>
               <Menu.Item
                 key="/mycart"
@@ -168,7 +169,7 @@ class NavigationBar extends React.Component {
   }
 }
 
-const mapStateToProps = Authentication => ( Authentication );
+const mapStateToProps = Authentication => Authentication;
 
 const mapDispatchToProps = { signin, signout };
 
