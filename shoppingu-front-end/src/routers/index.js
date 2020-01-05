@@ -2,7 +2,6 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory as createHistory } from "history";
 import PrivateRoute from "../components/PrivateRoute";
-import SigninPage from "../pages/Signin";
 import HomePage from "../pages/Home";
 import SignupPage from "../pages/Signup";
 import MyCartPage from "../pages/MyCart";
@@ -15,7 +14,6 @@ export default () => {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/signup" component={SignupPage} />
-        <Route exact path="/signin" component={SigninPage} />
         <PrivateRoute exact path="/mycart" component={MyCartPage} />
         <Route component={NotFoundPage} />
       </Switch>

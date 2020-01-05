@@ -8,7 +8,7 @@ export default props => {
   return (
     <Layout>
       <Header {...props} />
-      <Content style={{paddingTop: "1rem"}}>{props.children}</Content>
+      <Content style={{paddingTop: "1rem", paddingLeft: "15rem", paddingRight: "15rem"}}>{props.children}</Content>
       <Footer />
     </Layout>
   );

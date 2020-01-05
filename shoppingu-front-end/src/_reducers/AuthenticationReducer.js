@@ -10,6 +10,7 @@ const initialState = {
     name: "",
     profileImage: ""
   },
+  messages: [],
   isFetching: false,
   isFail: false
 };
@@ -21,32 +22,43 @@ const getStatus = Status => {
     case FAIL:
       return { isFetching: false, isFail: true };
     default:
-      return { isFetching: true, isFail: false };
+      return { isFetching: true, isFail: false, messages: [] };
   }
 };
 
 export default function(state = initialState, { type, payload }) {
   switch (type) {
+    // clear messages
+    case authConstants.CLEAR_MESSAGES:
+      return { ...state, messages: [] };
+
+    // sign in
     case authConstants.SIGNIN_REQUEST:
-      return { ...state,...payload, ...getStatus() };
+      return { ...state, ...getStatus() };
     case authConstants.SIGNIN_SUCCESS:
-      const { id, role, firstName, lastName, profileImage } = payload;
-      const fullName = `${firstName} ${lastName}`;
+      // const { id, role, firstName, lastName, profileImage } = payload.result;
+      // const fullName = `${firstName} ${lastName}`;
       return {
         item: {
           isAuthenticated: true,
-          id,
-          role,
-          firstName,
-          lastName,
-          fullName,
-          profileImage
+          // id,
+          // role,
+          // firstName,
+          // lastName,
+          // fullName,
+          // profileImage,
         },
+        messages: payload.messages,
         ...getStatus(SUCCESS)
-      }
+      };
     case authConstants.SIGNIN_FAILURE:
-      return { ...state, ...getStatus(FAIL) };
+      return {
+        ...state,
+        ...getStatus(FAIL),
+        messages: payload.messages
+      };
 
+    //sign out
     case authConstants.SIGNOUT_REQUEST:
       return { ...state, ...getStatus() };
     case authConstants.SIGNOUT_SUCCESS:
@@ -55,10 +67,11 @@ export default function(state = initialState, { type, payload }) {
         item: {
           isAuthenticated: false
         },
+        messages: payload.messages,
         ...getStatus(SUCCESS)
       };
     case authConstants.SIGNOUT_FAILURE:
-      return { ...state, ...getStatus(FAIL) };
+      return { ...state, ...getStatus(FAIL), messages: payload.messages };
 
     default:
       return state;

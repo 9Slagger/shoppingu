@@ -1,7 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Menu, Icon, Layout, Button, Row, Col, Input } from "antd";
-import { signin, signout } from "../_actions";
+import {
+  Menu,
+  Icon,
+  Layout,
+  Button,
+  Row,
+  Col,
+  Input,
+  notification
+} from "antd";
+import { signin, signout, clearMessages } from "../_actions";
 
 class NavigationBar extends React.Component {
   constructor(props) {
@@ -12,16 +21,20 @@ class NavigationBar extends React.Component {
       password: ""
     };
   }
-  signin = async e => {
-    if (this.state.showCheckEmail && this.state.password.length >= 8) {
-      try {
-        this.props.signin();
-      } catch (error) {
-        Notification("signin fail");
-      }
-    } else {
-      Notification("กรุณากรอก email และ password ให้ครบถ้วน");
+  componentDidMount() {
+    if (
+      this.props.Authentication.messages &&
+      this.props.Authentication.messages.length
+    ) {
+      this.showNotification(this.props.Authentication.messages);
     }
+  }
+  signin = async e => {
+    if (!(this.state.showCheckEmail && this.state.password.length >= 8)) {
+      this.showNotification(["กรุณากรอก email และ password ให้ครบถ้วน"]);
+    }
+    let { email, password } = this.state;
+    this.props.signin(email, password);
   };
   signinByKeyEnter = e => {
     if (e.key === "Enter") this.signin();
@@ -47,6 +60,21 @@ class NavigationBar extends React.Component {
     // console.log(path);
     this.props.history.push(path.key);
   };
+
+  showNotification(messages, description = "", duration = 5) {
+    if (messages.length) {
+      notification.open({
+        message: messages,
+        description,
+        duration
+      });
+      this.props.clearMessages();
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.showNotification(nextProps.Authentication.messages);
+  }
 
   renderSigninBox() {
     const { showCheckEmail, email, password } = this.state;
@@ -91,7 +119,11 @@ class NavigationBar extends React.Component {
         >
           Sign in
         </Button>
-        <label className="ml-1" onClick={this.signup}>
+        <label
+          style={{ cursor: "pointer" }}
+          className="ml-1"
+          onClick={this.signup}
+        >
           Sign up
         </label>
       </>
@@ -150,8 +182,7 @@ class NavigationBar extends React.Component {
               <Menu.Item style={{ float: "right" }}>
                 {Authentication.item.isAuthenticated
                   ? this.renderSignoutBox()
-                  : this.renderSigninBox()
-                }
+                  : this.renderSigninBox()}
               </Menu.Item>
               <Menu.Item
                 key="/mycart"
@@ -171,6 +202,6 @@ class NavigationBar extends React.Component {
 
 const mapStateToProps = Authentication => Authentication;
 
-const mapDispatchToProps = { signin, signout };
+const mapDispatchToProps = { signin, signout, clearMessages };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

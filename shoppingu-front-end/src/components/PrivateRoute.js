@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
-import { getToken } from "../_services/localStorage";
+import { getToken } from "../_helper/localStorage";
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => (
   <Route
