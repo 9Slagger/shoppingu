@@ -1,22 +1,24 @@
 const { UserModel, UserTypeModel, ShippingAddressModel } = require('../models')
 // const { cloneObjectWithoutFuntion } = require('../../util')
+const { hash } = require('../../util/bcrypt')
 
 module.exports = async () => {
   const userTypeAdmin = new UserTypeModel({
     type_name: 'Admin',
     type_code: '01AM'
   })
-  // const userTypeCustomer = new userTypeModel({
-  //   type_name: 'Customer',
-  //   type_code: '02CM'
-  // })
+  const userTypeUser = new UserTypeModel({
+    type_name: 'Customer',
+    type_code: '02CM'
+  })
   try {
     const userTypeAdminResult = await userTypeAdmin.save()
+    const userTypeUserResult = await userTypeUser.save()
     console.log('save userType success ✅ ')
     try {
       const user1 = new UserModel({
         email: 'akkarapong.kh@gmail.com',
-        password: '123456778',
+        password: hash('12345678'),
         phone_number: '0994671777',
         first_name: 'akkarapong',
         last_name: 'khamtanet',
@@ -24,6 +26,16 @@ module.exports = async () => {
         userTypeId: userTypeAdminResult.id
       })
       await user1.save()
+      const user2 = new UserModel({
+        email: 'akkarapong.kh@gmail.com',
+        password: hash('12345678'),
+        phone_number: '0994671777',
+        first_name: 'akkarapong',
+        last_name: 'khamtanet',
+        birthday: new Date(1996, 2, 8),
+        userTypeId: userTypeUserResult.id
+      })
+      await user2.save()
       console.log('save user success ✅ ')
       try {
         const shippingAddress = new ShippingAddressModel({
