@@ -1,5 +1,6 @@
 import { authConstants } from "../_actions/type";
 import { SUCCESS, FAIL } from "../_constants";
+import jwtDecode from "jwt-decode";
 
 const initialState = {
   item: {
@@ -29,24 +30,37 @@ const getStatus = Status => {
 export default function(state = initialState, { type, payload }) {
   switch (type) {
     // clear messages
-    case authConstants.CLEAR_MESSAGES:
+    case authConstants.CLEAR_MESSAGES_AUTHENTICATION:
       return { ...state, messages: [] };
 
     // sign in
     case authConstants.SIGNIN_REQUEST:
       return { ...state, ...getStatus() };
     case authConstants.SIGNIN_SUCCESS:
-      // const { id, role, firstName, lastName, profileImage } = payload.result;
-      // const fullName = `${firstName} ${lastName}`;
+      payload = {
+        ...payload,
+        result: { ...payload.result, ...jwtDecode(payload.result.token) }
+      };
+      const {
+        id,
+        email,
+        role,
+        firstName,
+        lastName,
+        phoneNumber,
+        profileImage
+      } = payload.result;
       return {
         item: {
           isAuthenticated: true,
-          // id,
-          // role,
-          // firstName,
-          // lastName,
-          // fullName,
-          // profileImage,
+          id,
+          email,
+          role,
+          phoneNumber,
+          firstName,
+          lastName,
+          fullName: `${firstName} ${lastName}`,
+          profileImage
         },
         messages: payload.messages,
         ...getStatus(SUCCESS)

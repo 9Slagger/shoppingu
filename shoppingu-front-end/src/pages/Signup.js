@@ -11,7 +11,7 @@ import {
   notification
 } from "antd";
 import moment from "moment";
-import serviceApi from "../_services/api";
+import serviceAuth from "../_services/auth";
 export default class Signup extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +74,7 @@ export default class Signup extends Component {
       duration = 10
     } else {
       try {
-        await serviceApi.signup({
+        await serviceAuth.signup({
           email,
           password,
           phoneNumber,
@@ -118,7 +118,6 @@ export default class Signup extends Component {
       lastName,
       birthday
     } = this.state;
-    console.warn("this.state", this.state);
     return (
       <DefaultLayout {...this.props}>
         <Row>

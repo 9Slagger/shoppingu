@@ -2,7 +2,7 @@ import axios from "../_helper/axios";
 import { removeToken, setToken } from "../_helper/localStorage";
 // import { message } from "antd";
 
-const serviceApi = {
+const serviceAuth = {
   // signin: obj =>
   //   new Promise(async (resolve, reject) => {
   //     const mock = {
@@ -43,7 +43,18 @@ const serviceApi = {
       } catch (error) {
         reject(error);
       }
+    }),
+
+  getStoreType: () =>
+    new Promise(async (resolve, reject) => {
+      let result;
+      try {
+        result = await axios.get("/storetype");
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
     })
 };
 
-export default serviceApi;
+export default serviceAuth;

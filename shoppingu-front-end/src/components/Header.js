@@ -61,12 +61,13 @@ class NavigationBar extends React.Component {
     this.props.history.push(path.key);
   };
 
-  showNotification(messages, description = "", duration = 5) {
+  showNotification(messages, description = "", duration = 2) {
     if (messages.length) {
-      notification.open({
+      notification.info({
         message: messages,
         description,
-        duration
+        duration,
+        placement: "topRight"
       });
       this.props.clearMessages();
     }
@@ -162,28 +163,28 @@ class NavigationBar extends React.Component {
                 <Icon type="home" />
                 Home
               </Menu.Item>
-              <Menu.SubMenu
-                title={
-                  <span className="submenu-title-wrapper">
-                    <Icon type="setting" />
-                    Navigation Three - Submenu
-                  </span>
-                }
-              >
-                <Menu.ItemGroup title="Item 1">
-                  <Menu.Item key="setting:1">Option 1</Menu.Item>
-                  <Menu.Item key="setting:2">Option 2</Menu.Item>
-                </Menu.ItemGroup>
-                <Menu.ItemGroup title="Item 2">
-                  <Menu.Item key="setting:3">Option 3</Menu.Item>
-                  <Menu.Item key="setting:4">Option 4</Menu.Item>
-                </Menu.ItemGroup>
-              </Menu.SubMenu>
+
               <Menu.Item style={{ float: "right" }}>
                 {Authentication.item.isAuthenticated
                   ? this.renderSignoutBox()
                   : this.renderSigninBox()}
               </Menu.Item>
+              <Menu.SubMenu
+                style={{ float: "right" }}
+                title={
+                  <span className="submenu-title-wrapper">
+                    <Icon type="setting" />
+                    Manage Store
+                  </span>
+                }
+              >
+                <Menu.ItemGroup title="ร้านค้า">
+                  <Menu.Item key="/store/add" onClick={this.handleClickNavbar}>
+                    เปิดร้านค้าใหม่
+                  </Menu.Item>
+                  <Menu.Item key="/store/edit">จัดการร้านค้า</Menu.Item>
+                </Menu.ItemGroup>
+              </Menu.SubMenu>
               <Menu.Item
                 key="/mycart"
                 style={{ float: "right" }}
