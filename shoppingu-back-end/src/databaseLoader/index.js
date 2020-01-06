@@ -12,13 +12,18 @@ module.exports = async () => {
     role_name: 'Admin',
     role_code: '01AM'
   })
-  const userTypeUser = new RoleModel({
+  const userTypeCustomer = new RoleModel({
     role_name: 'Customer',
     role_code: '02CM'
   })
+  const userTypeCustomerService = new RoleModel({
+    role_name: 'Customer Serivce',
+    role_code: '03CS'
+  })
   try {
     const userTypeAdminResult = await userTypeAdmin.save()
-    const userTypeUserResult = await userTypeUser.save()
+    const userTypeCustomerResult = await userTypeCustomer.save()
+    const userTypeCustomerServicerResult = await userTypeCustomerService.save()
     console.log('save userType success ✅ ')
     try {
       const user1 = new UserModel({
@@ -31,6 +36,7 @@ module.exports = async () => {
         roleId: userTypeAdminResult.id
       })
       await user1.save()
+      console.log('save admin success ✅ ')
       const user2 = new UserModel({
         email: 'akkarapong.kh@gmail.com',
         password: hash('12345678'),
@@ -38,10 +44,21 @@ module.exports = async () => {
         first_name: 'akkarapong',
         last_name: 'khamtanet',
         birthday: new Date(1996, 2, 8),
-        roleId: userTypeUserResult.id
+        roleId: userTypeCustomerResult.id
       })
       await user2.save()
-      console.log('save user success ✅ ')
+      console.log('save customer success ✅ ')
+      const user3 = new UserModel({
+        email: 'customerservice@gmail.com',
+        password: hash('12345678'),
+        phone_number: '0994671777',
+        first_name: 'akkarapong',
+        last_name: 'khamtanet',
+        birthday: new Date(1996, 2, 8),
+        roleId: userTypeCustomerServicerResult.id
+      })
+      await user3.save()
+      console.log('save customerservice success ✅ ')
       try {
         const shippingAddress = new ShippingAddressModel({
           address_detail: '123 Ideo Q Siam-Ratchathewi',

@@ -15,7 +15,6 @@ const verifyToken = (req, res, next) => {
   }
   jwt.verify(token, secretKey, (error, decoded) => {
     if (!_.isEmpty(error)) {
-      console.log(token)
       return res
         .status(400)
         .send({ messages: ['Failed to authenticate token.'] })

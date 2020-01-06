@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 ;(async () => {
   try {
-    await sequelize.sync({ force: true })
+    await sequelize.sync({ force: false })
     databaseLoader()
     app.listen(PORT, () => {
       console.log(`start server on port = ${PORT}`)
