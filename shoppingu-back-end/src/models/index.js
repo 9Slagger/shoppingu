@@ -1,5 +1,6 @@
+const sequelize = require('../dbconfig')
 const { UserModel } = require('./UserModel')
-const { UserTypeModel } = require('./UserTypeModel')
+const { RoleModel } = require('./RoleModel')
 const { ShippingAddressModel } = require('./ShippingAddressModel')
 const { BillingAddressModel } = require('./BillingAddressModel')
 const { StoreModel } = require('./StoreModel')
@@ -13,9 +14,9 @@ UserModel.hasMany(ShippingAddressModel, { foreignKey: 'userId' })
 UserModel.hasMany(BillingAddressModel, { foreignKey: 'userId' })
 
 // one user has one userType
-UserModel.belongsTo(UserTypeModel, { foreignKey: 'userTypeId' })
+UserModel.belongsTo(RoleModel, { foreignKey: 'roleId' })
 // one userType has many user
-UserTypeModel.hasMany(UserModel)
+RoleModel.hasMany(UserModel)
 
 // one user has many store
 UserModel.belongsToMany(StoreModel, { through: { model: ManagerStoreModel } })
@@ -28,8 +29,9 @@ StoreModel.belongsTo(StoreTypeModel, { foreignKey: 'storeTypeId' })
 StoreTypeModel.hasMany(StoreModel)
 
 module.exports = {
+  sequelize,
   UserModel,
-  UserTypeModel,
+  RoleModel,
   ShippingAddressModel,
   BillingAddressModel,
   StoreModel,

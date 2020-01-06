@@ -1,15 +1,20 @@
-const { UserModel, UserTypeModel, ShippingAddressModel } = require('../models')
+const {
+  UserModel,
+  RoleModel,
+  ShippingAddressModel,
+  StoreTypeModel
+} = require('../models')
 // const { cloneObjectWithoutFuntion } = require('../../util')
 const { hash } = require('../../util/bcrypt')
 
 module.exports = async () => {
-  const userTypeAdmin = new UserTypeModel({
-    type_name: 'Admin',
-    type_code: '01AM'
+  const userTypeAdmin = new RoleModel({
+    role_name: 'Admin',
+    role_code: '01AM'
   })
-  const userTypeUser = new UserTypeModel({
-    type_name: 'Customer',
-    type_code: '02CM'
+  const userTypeUser = new RoleModel({
+    role_name: 'Customer',
+    role_code: '02CM'
   })
   try {
     const userTypeAdminResult = await userTypeAdmin.save()
@@ -17,13 +22,13 @@ module.exports = async () => {
     console.log('save userType success ✅ ')
     try {
       const user1 = new UserModel({
-        email: 'akkarapong.kh@gmail.com',
+        email: 'admin@gmail.com',
         password: hash('12345678'),
         phone_number: '0994671777',
         first_name: 'akkarapong',
         last_name: 'khamtanet',
         birthday: new Date(1996, 2, 8),
-        userTypeId: userTypeAdminResult.id
+        roleId: userTypeAdminResult.id
       })
       await user1.save()
       const user2 = new UserModel({
@@ -33,7 +38,7 @@ module.exports = async () => {
         first_name: 'akkarapong',
         last_name: 'khamtanet',
         birthday: new Date(1996, 2, 8),
-        userTypeId: userTypeUserResult.id
+        roleId: userTypeUserResult.id
       })
       await user2.save()
       console.log('save user success ✅ ')
@@ -49,10 +54,10 @@ module.exports = async () => {
         await shippingAddress.save()
         console.log('save shippingAddress success ✅ ')
         // let temp = await UserModel.findAll({
-        //   include: [{ model: ShippingAddressModel }, { model: userTypeModel }]
+        //   include: [{ model: ShippingAddressModel }, { model: RoleModel }]
         // });
         // console.log(cloneObjectWithoutFuntion(temp[0]));
-        // let temp = await userTypeModel.findAll({
+        // let temp = await RoleModel.findAll({
         //   include: [ { model: UserModel }]
         // })
         // console.log(cloneObjectWithoutFuntion(temp[0]));
@@ -64,5 +69,23 @@ module.exports = async () => {
     }
   } catch (error) {
     console.log('save userType error ❌ ', error.parent.sqlMessage)
+  }
+  try {
+    StoreTypeModel.create({
+      store_type_name: 'นิติบุคคล',
+      store_type_code: '01LE'
+    })
+    console.log('save StoreType นิติบุคคล success ✅ ')
+  } catch (error) {
+    console.log('save StoreType นิติบุคคล error ❌ ', error.parent.sqlMessage)
+  }
+  try {
+    StoreTypeModel.create({
+      store_type_name: 'บุคคลธรรมดา',
+      store_type_code: '02IV'
+    })
+    console.log('save StoreType บุคคลธรรมดา success ✅ ')
+  } catch (error) {
+    console.log('save StoreType บุคคลธรรมดา error ❌ ', error.parent.sqlMessage)
   }
 }

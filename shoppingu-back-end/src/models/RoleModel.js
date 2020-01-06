@@ -1,17 +1,17 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('../dbconfig')
 
-class UserTypeModel extends Model {}
-UserTypeModel.init(
+class RoleModel extends Model {}
+RoleModel.init(
   {
-    type_name: {
+    role_name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
-    type_code: {
+    role_code: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -19,7 +19,7 @@ UserTypeModel.init(
       }
     }
   },
-  { sequelize, modelName: 'user_type' }
+  { sequelize, modelName: 'role' }
 )
 
-module.exports = { UserTypeModel }
+module.exports = { RoleModel }

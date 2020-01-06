@@ -16,7 +16,7 @@ module.exports = {
     let userTypeResult, userResult, result, messages
     try {
       userTypeResult = await db.UserTypeModel.findOne({
-        where: { type_code: '02CM' }
+        where: { role_code: '02CM' }
       })
       try {
         const { year, month, date } = req.body.birthday
@@ -27,7 +27,7 @@ module.exports = {
           first_name: req.body.firstName,
           last_name: req.body.lastName,
           birthday: new Date(year, month, date),
-          userTypeId: userTypeResult.id
+          roleId: userTypeResult.id
         })
         result = userResult
         return res.status(200).json({ result, messages })

@@ -9,6 +9,7 @@ module.exports = {
     try {
       userResult = await db.UserModel.findOne({
         where: { email: req.body.email },
+        include: [{ model: db.RoleModel }],
         raw: true
       })
       if (!_.isEmpty(userResult)) {
@@ -17,7 +18,13 @@ module.exports = {
           result.token = getToken({
             id: userResult.id,
             email: userResult.email,
-            role: userResult.role || '02CM'
+            role: userResult['role.role_code'],
+            phoneNumber: userResult.phone_number,
+            firstName: userResult.first_name,
+            lastName: userResult.last_name,
+            profileImage:
+              userResult.profileImage ||
+              'https://images.unsplash.com/photo-1533518463841-d62e1fc91373?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
           })
           return res.status(200).json({ result, messages: ['signin success'] })
         }

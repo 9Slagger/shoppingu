@@ -9,19 +9,21 @@ const getToken = obj => {
 }
 
 const verifyToken = (req, res, next) => {
-  var token = req.headers['x-access-token']
+  const token = req.headers.authorization.split(' ')[1]
   if (_.isEmpty(token)) {
-    return res.status(403).send({ message: ['no token provided.'] })
+    return res.status(403).send({ messages: ['no token provided.'] })
   }
   jwt.verify(token, secretKey, (error, decoded) => {
     if (!_.isEmpty(error)) {
+      console.log(token)
       return res
         .status(400)
-        .send({ message: ['Failed to authenticate token.'] })
+        .send({ messages: ['Failed to authenticate token.'] })
     } else {
-      req.user.username = decoded.username
+      req.user = {}
       req.user.id = decoded.id
-      req.user.type = decoded.type
+      req.user.email = decoded.email
+      req.user.role = decoded.role
       next()
     }
   })
