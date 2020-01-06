@@ -7,6 +7,7 @@ import SignupPage from "../pages/Signup";
 import MyCartPage from "../pages/MyCart";
 import NotFoundPage from "../pages/NotFound";
 import AddStorePage from "../pages/Store/AddStore"
+import ApproveStorePage from "../pages/Store/ApproveStore"
 export const history = createHistory();
 
 export default () => {
@@ -17,6 +18,7 @@ export default () => {
         <Route exact path="/signup" component={SignupPage} />
         <PrivateRoute exact path="/mycart" component={MyCartPage} />
         <PrivateRoute exact path="/store/add" component={AddStorePage} />
+        <PrivateRoute exact path="/store/approve" component={ApproveStorePage} />
         <Route component={NotFoundPage} />
       </Switch>
     </Router>

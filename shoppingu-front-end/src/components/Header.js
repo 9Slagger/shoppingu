@@ -57,7 +57,6 @@ class NavigationBar extends React.Component {
   };
 
   handleClickNavbar = path => {
-    // console.log(path);
     this.props.history.push(path.key);
   };
 
@@ -139,6 +138,49 @@ class NavigationBar extends React.Component {
     );
   }
 
+  renderCustomer() {
+    return (
+      <Menu.SubMenu
+        style={{ float: "right" }}
+        title={
+          <span className="submenu-title-wrapper">
+            <Icon type="setting" />
+            Manage Store
+          </span>
+        }
+      >
+        <Menu.ItemGroup title="ร้านค้า">
+          <Menu.Item key="/store/add" onClick={this.handleClickNavbar}>
+            เปิดร้านค้าใหม่
+          </Menu.Item>
+          <Menu.Item key="/store/edit" onClick={this.handleClickNavbar}>
+            จัดการร้านค้า
+          </Menu.Item>
+        </Menu.ItemGroup>
+      </Menu.SubMenu>
+    );
+  }
+
+  renderCustomerService() {
+    return (
+      <Menu.SubMenu
+        style={{ float: "right" }}
+        title={
+          <span className="submenu-title-wrapper">
+            <Icon type="setting" />
+            Manage Request
+          </span>
+        }
+      >
+        <Menu.ItemGroup title="จัดการคำร้อง">
+          <Menu.Item key="/store/approve" onClick={this.handleClickNavbar}>
+            คำร้องเปิดร้านค้า
+          </Menu.Item>
+        </Menu.ItemGroup>
+      </Menu.SubMenu>
+    );
+  }
+
   render() {
     const { Authentication } = this.props;
     return (
@@ -169,22 +211,9 @@ class NavigationBar extends React.Component {
                   ? this.renderSignoutBox()
                   : this.renderSigninBox()}
               </Menu.Item>
-              <Menu.SubMenu
-                style={{ float: "right" }}
-                title={
-                  <span className="submenu-title-wrapper">
-                    <Icon type="setting" />
-                    Manage Store
-                  </span>
-                }
-              >
-                <Menu.ItemGroup title="ร้านค้า">
-                  <Menu.Item key="/store/add" onClick={this.handleClickNavbar}>
-                    เปิดร้านค้าใหม่
-                  </Menu.Item>
-                  <Menu.Item key="/store/edit">จัดการร้านค้า</Menu.Item>
-                </Menu.ItemGroup>
-              </Menu.SubMenu>
+              {Authentication.item.role === "03CS" &&
+                this.renderCustomerService()}
+              {Authentication.item.role === "02CM" && this.renderCustomer()}
               <Menu.Item
                 key="/mycart"
                 style={{ float: "right" }}

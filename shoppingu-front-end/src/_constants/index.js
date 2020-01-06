@@ -3,3 +3,6 @@ export const ACCESS_TOKEN = "ACCESS_TOKEN"
 
 export const SUCCESS = "SUCCESS"
 export const FAIL = "FAIL"
+
+export const APPROVE = "APPROVE"
+export const REJECT = "REJECT"
