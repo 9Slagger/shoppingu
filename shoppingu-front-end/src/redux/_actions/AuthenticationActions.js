@@ -1,5 +1,5 @@
 import { authConstants } from "./type";
-import serviceAuth from "../_services/auth";
+import { serviceAuth } from "../../_services";
 // import { history } from "../routers";
 
 export const clearMessages = () => {

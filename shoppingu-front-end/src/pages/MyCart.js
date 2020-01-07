@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {} from "antd";
-import DefaultLayout from "../components/DefaultLayout";
+import DefaultLayout from "../commonComponents/DefaultLayout";
 
 class MyCart extends Component {
   constructor(props) {

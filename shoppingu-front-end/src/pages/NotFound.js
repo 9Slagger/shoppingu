@@ -12,12 +12,13 @@ export default class NotFound extends PureComponent {
     this.intervalId = setInterval(() => {
       this.setState(prevState => ({ count: prevState.count - 1 }));
     }, 1000);
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.props.history.push("/");
     }, 3000);
   }
   componentWillUnmount() {
     clearInterval(this.intervalId);
+    clearTimeout(this.timeoutId);
   }
   render() {
     const { count } = this.state;

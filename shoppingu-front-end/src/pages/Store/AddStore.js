@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import serviceStore from "../../_services/store";
-import DefaultLayout from "../../components/DefaultLayout";
-import { Row, Col, Form, Input, Button, Select, notification } from "antd";
+import { serviceStore } from "../../_services";
+import DefaultLayout from "../../commonComponents/DefaultLayout";
+import Notification from "../../commonComponents/Notification";
+import { Row, Col, Form, Input, Button, Select } from "antd";
 
 export default class AddStore extends Component {
   constructor(props) {
@@ -23,20 +24,9 @@ export default class AddStore extends Component {
     try {
       StoreTypeList = await serviceStore.getStoreType();
       StoreTypeList = StoreTypeList.result;
+      this.setState({ StoreTypeList });
     } catch (error) {
-      this.showNotification(error.messages);
-    }
-    this.setState({ StoreTypeList });
-  }
-
-  showNotification(messages, description = "", duration = 2) {
-    if (messages.length) {
-      notification.info({
-        message: messages,
-        description,
-        duration,
-        placement: "topRight"
-      });
+      Notification(error.messages);
     }
   }
 
@@ -52,18 +42,18 @@ export default class AddStore extends Component {
     const { storeName, storeDetail, storeTypeCode } = this.state;
     try {
       await serviceStore.createStore(storeName, storeDetail, storeTypeCode);
-      this.showNotification("สร้างคำร้องขอเปิดร้านค้าสำเร็จ");
-      this.props.history.push("/")
+      Notification(["สร้างคำร้องขอเปิดร้านค้าสำเร็จ"]);
+      this.props.history.push("/");
     } catch (error) {
-      this.showNotification(error.messages)
+      Notification(error.messages);
     }
   };
 
   render() {
     const { storeName, storeDetail, storeTypeCode, StoreTypeList } = this.state;
-    const lengthStoreDetail = storeDetail.split("\n");
+    const lineStoreDetail = storeDetail.split("\n");
     const rowsStoreDetail =
-      lengthStoreDetail.length > 10 ? lengthStoreDetail.length : 10;
+      lineStoreDetail.length > 10 ? lineStoreDetail.length : 10;
     return (
       <DefaultLayout {...this.props}>
         <Row>

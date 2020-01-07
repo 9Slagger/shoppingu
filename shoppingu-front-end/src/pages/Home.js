@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
-import DefaultLayout from "../components/DefaultLayout";
-import ProductOverview from "../components/ProductOverview";
+import DefaultLayout from "../commonComponents/DefaultLayout";
+import ProductOverview from "../commonComponents/ProductOverview";
 
 export default class Home extends Component {
   constructor(props) {

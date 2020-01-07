@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import serviceStore from "../../_services/store";
-import DefaultLayout from "../../components/DefaultLayout";
-import { Row, Col, Table, Divider, Tag, notification } from "antd";
+import { serviceStore } from "../../_services";
+import DefaultLayout from "../../commonComponents/DefaultLayout";
+import Notification from "../../commonComponents/Notification";
+import { Row, Col, Table, Divider, Tag } from "antd";
 import { APPROVE, REJECT } from "../../_constants";
+import moment from "moment";
 
 export default class approveStore extends Component {
   constructor(props) {
@@ -83,9 +85,11 @@ export default class approveStore extends Component {
       try {
         result = await serviceStore.approveStore(id);
         this.getStoreNotApprove();
-        this.showNotification(result.messages);
+        Notification(result.messages)
+        this.props.clearMessages();
       } catch (error) {
-        this.showNotification(error.messages);
+        Notification(error.messages)
+        this.props.clearMessages();
       }
     } else if (REJECT) {
       alert("coming soon");
@@ -93,34 +97,26 @@ export default class approveStore extends Component {
   };
 
   async getStoreNotApprove() {
-    console.log("debug");
     let storeList;
     try {
       storeList = await serviceStore.getStoreNotApprove();
       storeList = storeList.result;
       // preparedata
-      storeList = storeList.map(data => ({ ...data, key: data.id }));
+      storeList = storeList.map(data => ({
+        ...data,
+        key: data.id,
+        createdAt: moment(data.createdAt).format("DD/MM/YYYY h:mm"),
+        updatedAt: moment(data.updatedAt).format("DD/MM/YYYY h:mm")
+      }));
+      this.setState({ storeList });
     } catch (error) {
-      this.showNotification(error.messages);
-    }
-    this.setState({ storeList });
-  }
-
-  showNotification(messages, description = "", duration = 2) {
-    if (Array.isArray(messages) && messages.length) {
-      notification.info({
-        message: messages,
-        description,
-        duration,
-        placement: "topRight"
-      });
+      Notification(error.messages)
       this.props.clearMessages();
     }
   }
 
   render() {
     const { columns, storeList } = this.state;
-    console.log(storeList);
     return (
       <DefaultLayout {...this.props}>
         <Row>

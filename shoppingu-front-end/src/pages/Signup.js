@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import DefaultLayout from "../components/DefaultLayout";
+import DefaultLayout from "../commonComponents/DefaultLayout";
 import {
   Row,
   Col,
   Form,
   Input,
-  // Select,
   DatePicker,
   Button,
   notification
 } from "antd";
 import moment from "moment";
-import serviceAuth from "../_services/auth";
+import { serviceAuth } from "../_services";
 export default class Signup extends Component {
   constructor(props) {
     super(props);
@@ -71,7 +70,7 @@ export default class Signup extends Component {
     }
     if (description.length !== 0) {
       message = "คุณกรอกข้อมูลไม่ถูกต้อง !";
-      duration = 10
+      duration = 10;
     } else {
       try {
         await serviceAuth.signup({
@@ -86,7 +85,6 @@ export default class Signup extends Component {
         description.push("สมัครสมาชิกสำเร็จ");
         this.props.history.push("/");
       } catch (error) {
-        console.log(error);
         message = "Signup Fail";
         description.push("someting wrong");
       }
@@ -191,7 +189,7 @@ export default class Signup extends Component {
                   <DatePicker
                     name="birthday"
                     onChange={this.handleChangeDatePicker}
-                    defaultValue={moment(birthday, "YYYY/MM/DD")}
+                    defaultValue={moment(birthday, "DD/MM/YYYY")}
                   />
                 </Form.Item>
               </Col>

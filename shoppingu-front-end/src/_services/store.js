@@ -1,6 +1,16 @@
 import axios from "../_helper/axios";
 
-const serviceAuth = {
+const serviceStore = {
+  publishStore: (id, status) =>
+    new Promise(async (resolve, reject) => {
+      let result;
+      try {
+        result = await axios.patch(`/store/publish/${id}`, { status });
+        resolve(result.data);
+      } catch (error) {
+        reject(error.response.data);
+      }
+    }),
   approveStore: id =>
     new Promise(async (resolve, reject) => {
       let result;
@@ -16,6 +26,16 @@ const serviceAuth = {
       let result;
       try {
         result = await axios.get("/store/notapprove");
+        resolve(result.data);
+      } catch (error) {
+        reject(error.response.data);
+      }
+    }),
+  getMyStore: () =>
+    new Promise(async (resolve, reject) => {
+      let result;
+      try {
+        result = await axios.get("/store/me");
         resolve(result.data);
       } catch (error) {
         reject(error.response.data);
@@ -47,4 +67,4 @@ const serviceAuth = {
     })
 };
 
-export default serviceAuth;
+export { serviceStore };

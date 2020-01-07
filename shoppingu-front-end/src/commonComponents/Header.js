@@ -1,16 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Menu,
-  Icon,
-  Layout,
-  Button,
-  Row,
-  Col,
-  Input,
-  notification
-} from "antd";
-import { signin, signout, clearMessages } from "../_actions";
+import Notification from "../commonComponents/Notification";
+import { Menu, Icon, Layout, Button, Row, Col, Input } from "antd";
+import { signin, signout, clearMessages } from "../redux/_actions";
 
 class NavigationBar extends React.Component {
   constructor(props) {
@@ -22,16 +14,15 @@ class NavigationBar extends React.Component {
     };
   }
   componentDidMount() {
-    if (
-      this.props.Authentication.messages &&
-      this.props.Authentication.messages.length
-    ) {
-      this.showNotification(this.props.Authentication.messages);
+    if (this.props.Authentication.messages.length) {
+      Notification(this.props.Authentication.messages);
+      this.props.clearMessages();
     }
   }
   signin = async e => {
     if (!(this.state.showCheckEmail && this.state.password.length >= 8)) {
-      this.showNotification(["กรุณากรอก email และ password ให้ครบถ้วน"]);
+      Notification(["กรุณากรอก email และ password ให้ครบถ้วน"]);
+      this.props.clearMessages();
     }
     let { email, password } = this.state;
     this.props.signin(email, password);
@@ -60,20 +51,11 @@ class NavigationBar extends React.Component {
     this.props.history.push(path.key);
   };
 
-  showNotification(messages, description = "", duration = 2) {
-    if (messages.length) {
-      notification.info({
-        message: messages,
-        description,
-        duration,
-        placement: "topRight"
-      });
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.Authentication.messages.length) {
+      Notification(nextProps.Authentication.messages);
       this.props.clearMessages();
     }
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.showNotification(nextProps.Authentication.messages);
   }
 
   renderSigninBox() {
@@ -153,7 +135,7 @@ class NavigationBar extends React.Component {
           <Menu.Item key="/store/add" onClick={this.handleClickNavbar}>
             เปิดร้านค้าใหม่
           </Menu.Item>
-          <Menu.Item key="/store/edit" onClick={this.handleClickNavbar}>
+          <Menu.Item key="/mystore/list" onClick={this.handleClickNavbar}>
             จัดการร้านค้า
           </Menu.Item>
         </Menu.ItemGroup>
@@ -181,8 +163,22 @@ class NavigationBar extends React.Component {
     );
   }
 
+  getNavColor(match) {
+    if (match.path.search("/store/add") !== -1) {
+      return "navbar-green";
+    }
+    if (match.path.search("/mystore/list") !== -1) {
+      return "navbar-green";
+    }
+    if (match.path.search("/store/approve") !== -1) {
+      return "navbar-green";
+    }
+    return "navbar-light";
+  }
+
   render() {
-    const { Authentication } = this.props;
+    const { Authentication, match } = this.props;
+    const navColor = this.getNavColor(match);
     return (
       <Layout.Header
         style={{
@@ -196,10 +192,9 @@ class NavigationBar extends React.Component {
         <Row>
           <Col lg={{ span: 24, offset: 0 }}>
             <Menu
-              style={{ lineHeight: "64px" }}
+              id={navColor}
               selectedKeys={[this.props.match.url]}
               mode="horizontal"
-              theme="light"
             >
               <Menu.Item key="/" onClick={this.handleClickNavbar}>
                 <Icon type="home" />
@@ -230,7 +225,7 @@ class NavigationBar extends React.Component {
   }
 }
 
-const mapStateToProps = Authentication => Authentication;
+const mapStateToProps = ({ Authentication }) => ({ Authentication });
 
 const mapDispatchToProps = { signin, signout, clearMessages };
 

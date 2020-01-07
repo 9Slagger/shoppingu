@@ -57,4 +57,4 @@ const serviceAuth = {
     })
 };
 
-export default serviceAuth;
+export { serviceAuth };

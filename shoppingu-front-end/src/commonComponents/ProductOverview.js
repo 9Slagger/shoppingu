@@ -2,7 +2,14 @@ import React from "react";
 import { Card } from "antd";
 
 export default props => {
-  const getPercent = (netPrice, salePrice) => (100 - (netPrice / salePrice) * 100).toFixed(0);
+  const getPercent = (netPrice, salePrice) => {
+    let result = (100 - (netPrice / salePrice) * 100).toFixed(0);
+    if (result > Number.MIN_SAFE_INTEGER) {
+      return result * -1;
+    } else {
+      return 0;
+    }
+  }
   const { product } = props;
   return (
     <Card
@@ -26,7 +33,7 @@ export default props => {
       </label>
       <br />
       <label style={{ color: "777777", fontSize: "12px" }}>
-        <s>${product.salePrice}</s> -
+        <s>${product.salePrice}</s>{" "}
         {getPercent(product.netPrice, product.salePrice)}%
       </label>
     </Card>
