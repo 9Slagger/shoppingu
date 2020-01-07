@@ -2,12 +2,38 @@ const {
   UserModel,
   RoleModel,
   ShippingAddressModel,
-  StoreTypeModel
+  StoreTypeModel,
+  ProductTypeModel
 } = require('../models')
 // const { cloneObjectWithoutFuntion } = require('../../util')
 const { hash } = require('../../util/bcrypt')
 
 module.exports = async () => {
+  try {
+    await ProductTypeModel.create({
+      type_name: 'สมาร์ทโฟน',
+      type_code: '001SP'
+    })
+    await ProductTypeModel.create({
+      type_name: 'เสื้อ',
+      type_code: '002ST'
+    })
+    await ProductTypeModel.create({
+      type_name: 'กางเกง',
+      type_code: '003PT'
+    })
+    await ProductTypeModel.create({
+      type_name: 'เครื่องใช้ไฟฟ้า',
+      type_code: '004EA'
+    })
+    await ProductTypeModel.create({
+      type_name: 'คอมพิวเตอร์',
+      type_code: '005CT'
+    })
+    console.log('save ProductType success ✅ ')
+  } catch (error) {
+    console.log('save ProductType error ❌ ')
+  }
   const userTypeAdmin = new RoleModel({
     role_name: 'Admin',
     role_code: '01AM'

@@ -3,9 +3,21 @@ const { UserModel } = require('./UserModel')
 const { RoleModel } = require('./RoleModel')
 const { ShippingAddressModel } = require('./ShippingAddressModel')
 const { BillingAddressModel } = require('./BillingAddressModel')
+const { ProductTypeModel } = require('./ProductTypeModel')
+const { ProductModel } = require('./ProductModel')
 const { StoreModel } = require('./StoreModel')
 const { StoreTypeModel } = require('./StoreTypeModel')
 const { ManagerStoreModel } = require('./ManagerStoreModel')
+
+//
+ProductModel.belongsTo(ProductTypeModel, { foreignKey: 'productTypeId' })
+//
+ProductTypeModel.hasMany(ProductModel)
+
+//
+ProductModel.belongsTo(StoreModel, { foreignKey: 'storeId' })
+//
+StoreModel.hasMany(ProductModel)
 
 // One user has many shippingAddress
 UserModel.hasMany(ShippingAddressModel, { foreignKey: 'userId' })
@@ -22,6 +34,10 @@ RoleModel.hasMany(UserModel)
 UserModel.belongsToMany(StoreModel, { through: { model: ManagerStoreModel } })
 // one store has many user
 StoreModel.belongsToMany(UserModel, { through: { model: ManagerStoreModel } })
+//
+ManagerStoreModel.belongsTo(StoreModel)
+//
+ManagerStoreModel.belongsTo(UserModel)
 
 // one store has one storeType
 StoreModel.belongsTo(StoreTypeModel, { foreignKey: 'storeTypeId' })
@@ -30,6 +46,8 @@ StoreTypeModel.hasMany(StoreModel)
 
 module.exports = {
   sequelize,
+  ProductModel,
+  ProductTypeModel,
   UserModel,
   RoleModel,
   ShippingAddressModel,

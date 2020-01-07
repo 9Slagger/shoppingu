@@ -2,6 +2,87 @@ const db = require('../models')
 const _ = require('lodash')
 
 module.exports = {
+  publishStore: async (req, res, next) => {
+    let targetStore, targetManagerStore, result, messages, status
+    try {
+      targetManagerStore = await db.ManagerStoreModel.findOne({
+        where: { userId: req.user.id },
+        raw: true
+      })
+      if (targetManagerStore.isAdmin !== 1 || _.isEmpty(targetManagerStore)) {
+        messages = ['no permisstion']
+        status = 403
+        return res.status(status).json({ result, messages })
+      }
+      try {
+        targetStore = await db.StoreModel.findOne({
+          where: { id: req.params.id }
+        })
+        if (_.isEmpty(targetStore)) {
+          messages = ['store not found']
+          status = 400
+          return res.status(status).json({ result, messages })
+        }
+        try {
+          targetStore.update({ is_active: req.body.status })
+          messages = [
+            `${req.body.status ? 'open store success' : 'close store success'}`
+          ]
+          status = 200
+        } catch (error) {
+          messages = ['someting wrong']
+          status = 400
+        }
+      } catch (error) {
+        messages = ['someting wrong']
+        status = 400
+      }
+    } catch (error) {
+      messages = ['someting wrong']
+      status = 400
+    }
+    res.status(status).json({ result, messages })
+  },
+  getMyStore: async (req, res, next) => {
+    let result, messages, status
+    try {
+      result = await db.ManagerStoreModel.findAll({
+        attributes: ['userId', 'storeId', 'isAdmin', 'createdAt', 'updatedAt'],
+        where: { userId: req.user.id },
+        raw: true,
+        include: [
+          {
+            model: db.StoreModel,
+            attributes: [
+              'id',
+              'store_name',
+              'store_detail',
+              'approved',
+              'is_active'
+            ],
+            include: [
+              { model: db.StoreTypeModel, attributes: ['store_type_name'] },
+              {
+                model: db.UserModel,
+                attributes: ['email', 'phone_number', 'first_name', 'last_name']
+              }
+            ]
+          }
+        ]
+      })
+      result = result.map(data => ({
+        ...data,
+        id: parseInt(`${data.userId}` + `${data.storeId}`, 10)
+      }))
+      messages = ['get store success']
+      status = 200
+    } catch (error) {
+      result = error
+      messages = ["can't get store"]
+      status = 200
+    }
+    res.status(status).json({ result, messages })
+  },
   approveStore: async (req, res, next) => {
     let targetStore, result, messages, status
     if (req.user.role !== '03CS' && req.user.role !== '01AM') {
