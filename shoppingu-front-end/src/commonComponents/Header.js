@@ -1,8 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import Notification from "../commonComponents/Notification";
-import { Menu, Icon, Layout, Button, Row, Col, Input } from "antd";
-import { signin, signout, clearMessages } from "../redux/_actions";
+import { Menu, Icon, Layout, Button, Row, Col, Input, Badge } from "antd";
+import {
+  signin,
+  signout,
+  clearMessages,
+  getProductInMyCart
+} from "../redux/_actions";
 
 class NavigationBar extends React.Component {
   constructor(props) {
@@ -10,11 +15,16 @@ class NavigationBar extends React.Component {
     this.state = {
       showCheckEmail: false,
       email: "",
-      password: ""
+      password: "",
+      search: ""
     };
   }
   componentDidMount() {
-    if (this.props.Authentication.messages.length) {
+    this.props.getProductInMyCart();
+    if (
+      this.props.Authentication.messages &&
+      this.props.Authentication.messages.length
+    ) {
       Notification(this.props.Authentication.messages);
       this.props.clearMessages();
     }
@@ -52,7 +62,10 @@ class NavigationBar extends React.Component {
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.Authentication.messages.length) {
+    if (
+      nextProps.Authentication.messages &&
+      nextProps.Authentication.messages.length
+    ) {
       Notification(nextProps.Authentication.messages);
       this.props.clearMessages();
     }
@@ -163,22 +176,36 @@ class NavigationBar extends React.Component {
     );
   }
 
-  getNavColor(match) {
-    if (match.path.search("/store/add") !== -1) {
-      return "navbar-green";
+  getNavColor() {
+    if (
+      this.props.Authentication.item.role &&
+      this.props.Authentication.item.role === "03CS"
+    ) {
+      return "dark";
     }
-    if (match.path.search("/mystore/list") !== -1) {
-      return "navbar-green";
-    }
-    if (match.path.search("/store/approve") !== -1) {
-      return "navbar-green";
-    }
-    return "navbar-light";
+    return "light";
   }
 
+  handlePressEnterSearch = e => {
+    if (e.key === "Enter") {
+      this.handleSearch();
+    }
+  };
+
+  handleSearch = () => {
+    alert("coming soon");
+  };
+
   render() {
-    const { Authentication, match } = this.props;
-    const navColor = this.getNavColor(match);
+    const { search } = this.state;
+    const { Authentication, Cart } = this.props;
+    const navColor = this.getNavColor();
+    const countNoti =
+      Cart.item.products &&
+      Cart.item.products.length &&
+      Cart.item.products.reduce((sum, product) => {
+        return sum + product.product_in_cart.amount;
+      }, 0);
     return (
       <Layout.Header
         style={{
@@ -192,7 +219,7 @@ class NavigationBar extends React.Component {
         <Row>
           <Col lg={{ span: 24, offset: 0 }}>
             <Menu
-              id={navColor}
+              theme={navColor}
               selectedKeys={[this.props.match.url]}
               mode="horizontal"
             >
@@ -200,7 +227,23 @@ class NavigationBar extends React.Component {
                 <Icon type="home" />
                 Home
               </Menu.Item>
-
+              <Menu.Item
+                style={{
+                  marginLeft: !Authentication.item.isAuthenticated
+                    ? "0%"
+                    : "25%"
+                }}
+              >
+                <Input
+                  type="text"
+                  placeholder="ค้นหาสินค้า"
+                  style={{ width: "550px" }}
+                  name="search"
+                  value={search}
+                  onKeyPress={this.handlePressEnterSearch}
+                />
+                <Icon type="search" onClick={this.handleSearch} />
+              </Menu.Item>
               <Menu.Item style={{ float: "right" }}>
                 {Authentication.item.isAuthenticated
                   ? this.renderSignoutBox()
@@ -209,14 +252,18 @@ class NavigationBar extends React.Component {
               {Authentication.item.role === "03CS" &&
                 this.renderCustomerService()}
               {Authentication.item.role === "02CM" && this.renderCustomer()}
-              <Menu.Item
-                key="/mycart"
-                style={{ float: "right" }}
-                onClick={this.handleClickNavbar}
-              >
-                <Icon type="shopping-cart" />
-                My Cart
-              </Menu.Item>
+              {Authentication.item.role === "02CM" && (
+                <Menu.Item
+                  key="/mycart"
+                  style={{ float: "right" }}
+                  onClick={this.handleClickNavbar}
+                >
+                  My Cart
+                  <Badge count={countNoti}>
+                    <Icon type="shopping-cart" />
+                  </Badge>
+                </Menu.Item>
+              )}
             </Menu>
           </Col>
         </Row>
@@ -225,8 +272,16 @@ class NavigationBar extends React.Component {
   }
 }
 
-const mapStateToProps = ({ Authentication }) => ({ Authentication });
+const mapStateToProps = ({ Authentication, Cart }) => ({
+  Authentication,
+  Cart
+});
 
-const mapDispatchToProps = { signin, signout, clearMessages };
+const mapDispatchToProps = {
+  signin,
+  signout,
+  clearMessages,
+  getProductInMyCart
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

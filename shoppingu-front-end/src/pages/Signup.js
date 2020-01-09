@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import DefaultLayout from "../commonComponents/DefaultLayout";
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  DatePicker,
-  Button,
-  notification
-} from "antd";
+import { Row, Col, Form, Input, DatePicker, Button, notification } from "antd";
 import moment from "moment";
 import { serviceAuth } from "../_services";
 export default class Signup extends Component {
@@ -104,8 +96,9 @@ export default class Signup extends Component {
   };
 
   handleChangeDatePicker = e => {
-    this.setState({ birthday: e._d });
+    if (e && e._d) this.setState({ birthday: e._d });
   };
+  
   render() {
     const {
       email,

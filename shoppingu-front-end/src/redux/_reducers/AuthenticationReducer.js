@@ -37,6 +37,7 @@ export default function(state = initialState, { type, payload }) {
     case authConstants.SIGNIN_REQUEST:
       return { ...state, ...getStatus() };
     case authConstants.SIGNIN_SUCCESS:
+      console.log("getProductInMyCart")
       payload = {
         ...payload,
         result: { ...payload.result, ...jwtDecode(payload.result.token) }
@@ -76,6 +77,7 @@ export default function(state = initialState, { type, payload }) {
     case authConstants.SIGNOUT_REQUEST:
       return { ...state, ...getStatus() };
     case authConstants.SIGNOUT_SUCCESS:
+      localStorage.clear();
       return {
         ...state,
         item: {

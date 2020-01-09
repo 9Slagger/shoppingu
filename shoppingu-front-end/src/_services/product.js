@@ -1,6 +1,26 @@
 import axios from "../_helper/axios";
 
 const serviceProduct = {
+  getProduct: productId =>
+    new Promise(async (resolve, reject) => {
+      let result;
+      try {
+        result = await axios.get(`/product/publish/${productId}`);
+        resolve(result.data);
+      } catch (error) {
+        reject(error.response.data);
+      }
+    }),
+  getPublishProduct: () =>
+    new Promise(async (resolve, reject) => {
+      let result;
+      try {
+        result = await axios.get("/product/publish");
+        resolve(result.data);
+      } catch (error) {
+        reject(error.response.data);
+      }
+    }),
   modifyProduct: (
     productId,
     StoreId,
@@ -34,7 +54,8 @@ const serviceProduct = {
     isSale,
     productDetail,
     salePrice,
-    netDiscountPrice
+    netDiscountPrice,
+    amount
   ) =>
     new Promise(async (resolve, reject) => {
       let result;
@@ -44,7 +65,8 @@ const serviceProduct = {
           isSale,
           productDetail,
           salePrice,
-          netDiscountPrice
+          netDiscountPrice,
+          amount
         });
         resolve(result.data);
       } catch (error) {

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { serviceProduct, serviceProductType } from "../../_services";
 import DefaultLayout from "../../commonComponents/DefaultLayout";
+import UploadFile from "../../commonComponents/UploadFile";
 import Notification from "../../commonComponents/Notification";
 import {
   Row,
@@ -21,6 +22,8 @@ export default class ManageProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      disableInput: false,
+      productId: "",
       showAddProduct: false,
       productName: "",
       productTypeCode: "",
@@ -28,6 +31,7 @@ export default class ManageProduct extends Component {
       productDetail: "",
       salePrice: "",
       netDiscountPrice: "",
+      amount: 0,
       productTypeList: [],
       columns: [
         {
@@ -57,6 +61,11 @@ export default class ManageProduct extends Component {
               checked={!!data["is_sale"]}
             />
           )
+        },
+        {
+          title: "จำนวนคงเหลือ",
+          key: "amount",
+          dataIndex: "amount"
         },
         {
           title: "ราคาเต็ม",
@@ -159,7 +168,8 @@ export default class ManageProduct extends Component {
       isSale,
       productDetail,
       salePrice,
-      netDiscountPrice
+      netDiscountPrice,
+      amount
     } = this.state;
     let productResult;
     try {
@@ -170,8 +180,10 @@ export default class ManageProduct extends Component {
         isSale,
         productDetail,
         salePrice,
-        netDiscountPrice
+        netDiscountPrice,
+        amount
       );
+      this.setState({ productId: productResult.result.id, disableInput: true });
       this.getProductFromStore();
       Notification(productResult.messages);
     } catch (error) {
@@ -179,10 +191,14 @@ export default class ManageProduct extends Component {
     }
   };
 
+  clearProductId = () => {
+    this.setState({ productId: "", disableInput: true });
+    Notification(["upload image success"]);
+  };
+
   modifyProduct = productId => async e => {
     const storeId = window.atob(this.props.match.params.storeId);
-    const isSale = e
-    console.log(e)
+    const isSale = e;
     const {
       // productTypeCode,
       productName,
@@ -212,6 +228,8 @@ export default class ManageProduct extends Component {
 
   render() {
     const {
+      disableInput,
+      productId,
       columns,
       productList,
       productTypeList,
@@ -221,11 +239,12 @@ export default class ManageProduct extends Component {
       productDetail,
       salePrice,
       netDiscountPrice,
+      amount,
       showAddProduct
     } = this.state;
     const lineProductDetail = productDetail.split("\n");
     const rowsproductDetail =
-      lineProductDetail.length > 10 ? lineProductDetail.length : 10;
+      lineProductDetail.length > 15 ? lineProductDetail.length : 15;
     return (
       <DefaultLayout {...this.props}>
         <Row>
@@ -240,6 +259,7 @@ export default class ManageProduct extends Component {
                         name="productName"
                         value={productName}
                         onChange={this.hangleChangeInput}
+                        disabled={disableInput}
                       />
                     </Form.Item>
                   </Col>
@@ -249,6 +269,7 @@ export default class ManageProduct extends Component {
                         name="productTypeCode"
                         value={productTypeCode}
                         onChange={this.hangleSelectOrCheck}
+                        disabled={disableInput}
                       >
                         {Array.isArray(productTypeList) &&
                           productTypeList.map(product => (
@@ -268,6 +289,7 @@ export default class ManageProduct extends Component {
                         name="isSale"
                         checked={isSale}
                         onChange={this.hangleSelectOrCheck}
+                        disabled={disableInput}
                       />
                     </Form.Item>
                   </Col>
@@ -279,26 +301,43 @@ export default class ManageProduct extends Component {
                         name="productDetail"
                         value={productDetail}
                         onChange={this.hangleChangeInput}
+                        disabled={disableInput}
                       />
                     </Form.Item>
                   </Col>
-                  <Col sm={4}>
+                  <Col sm={2}>
+                    <Form.Item label="จำนวนสินค้า">
+                      <Input
+                        name="amount"
+                        type="number"
+                        onChange={this.hangleChangeInput}
+                        value={amount}
+                        placeholder="245"
+                        disabled={disableInput}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col sm={3}>
                     <Form.Item label="ราคาเต็ม">
                       <Input
                         name="salePrice"
+                        type="number"
                         onChange={this.hangleChangeInput}
                         value={salePrice}
                         placeholder="7000"
+                        disabled={disableInput}
                       />
                     </Form.Item>
                   </Col>
-                  <Col sm={4}>
+                  <Col sm={3}>
                     <Form.Item label="ราคาขาย">
                       <Input
                         name="netDiscountPrice"
+                        type="number"
                         onChange={this.hangleChangeInput}
                         value={netDiscountPrice}
                         placeholder="5500"
+                        disabled={disableInput}
                       />
                     </Form.Item>
                   </Col>
@@ -315,19 +354,48 @@ export default class ManageProduct extends Component {
                   </Col>
                   <Col sm={12}>
                     <Form.Item style={{ display: "table", margin: "0 auto" }}>
+                      {productId && (
+                        <UploadFile
+                          productId={productId}
+                          clearProductId={this.clearProductId}
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item style={{ display: "table", margin: "0 auto" }}>
                       <br />
-                      <Button type="primary" onClick={this.handleSubmit}>
-                        Submit
-                      </Button>
-                      <Divider type="vertical" />
-                      <Button
-                        type="light"
-                        onClick={() => {
-                          this.setState({ showAddProduct: false });
-                        }}
-                      >
-                        Cancel
-                      </Button>
+                      {!disableInput ? (
+                        <>
+                          <Button
+                            type="primary"
+                            onClick={this.handleSubmit}
+                            disabled={disableInput}
+                          >
+                            Submit
+                          </Button>
+                          <Divider type="vertical" />
+                          <Button
+                            type="light"
+                            onClick={() => {
+                              this.setState({ showAddProduct: false });
+                            }}
+                            disabled={disableInput}
+                          >
+                            Close
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          type="primary"
+                          onClick={() => {
+                            this.setState({
+                              disableInput: false,
+                              productId: ""
+                            });
+                          }}
+                        >
+                          เพิ่มสินค้าชิ้นใหม่
+                        </Button>
+                      )}
                     </Form.Item>
                   </Col>
                 </Row>

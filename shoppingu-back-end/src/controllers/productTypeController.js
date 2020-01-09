@@ -8,7 +8,7 @@ module.exports = {
       status = 200
       messages = ['get product type success']
     } catch (error) {
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
       result = error
     }

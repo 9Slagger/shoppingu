@@ -1,5 +1,6 @@
 import { authConstants } from "./type";
 import { serviceAuth } from "../../_services";
+import { getProductInMyCart } from "../_actions/CartActions";
 // import { history } from "../routers";
 
 export const clearMessages = () => {
@@ -20,6 +21,7 @@ export const signin = (email, password) => {
         email,
         password
       });
+      dispatch(getProductInMyCart())
       dispatch({ type: authConstants.SIGNIN_SUCCESS, payload: data });
     } catch (error) {
       dispatch({ type: authConstants.SIGNIN_FAILURE, payload: error });

@@ -8,6 +8,22 @@ const { ProductModel } = require('./ProductModel')
 const { StoreModel } = require('./StoreModel')
 const { StoreTypeModel } = require('./StoreTypeModel')
 const { ManagerStoreModel } = require('./ManagerStoreModel')
+const { FileModel } = require('./FileModel')
+const { CartModel } = require('./CartModel')
+const { ProductInCart } = require('./ProductInCart')
+
+//
+CartModel.belongsToMany(ProductModel, { through: { model: ProductInCart } })
+//
+ProductModel.belongsToMany(CartModel, { through: { model: ProductInCart } })
+
+//
+UserModel.hasOne(CartModel)
+
+//
+FileModel.belongsTo(ProductModel, { foreignKey: 'productId' })
+//
+ProductModel.hasMany(FileModel)
 
 //
 ProductModel.belongsTo(ProductTypeModel, { foreignKey: 'productTypeId' })
@@ -46,6 +62,7 @@ StoreTypeModel.hasMany(StoreModel)
 
 module.exports = {
   sequelize,
+  ProductInCart,
   ProductModel,
   ProductTypeModel,
   UserModel,
@@ -54,5 +71,7 @@ module.exports = {
   BillingAddressModel,
   StoreModel,
   StoreTypeModel,
-  ManagerStoreModel
+  ManagerStoreModel,
+  FileModel,
+  CartModel
 }

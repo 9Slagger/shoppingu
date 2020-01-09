@@ -1,6 +1,55 @@
 const db = require('../models')
 const _ = require('lodash')
 module.exports = {
+  getPublishProduct: async (req, res, next) => {
+    let productResult, result, messages, status
+    try {
+      productResult = await db.ProductModel.findOne({
+        where: { id: req.params.productId, is_sale: true },
+        include: [
+          { model: db.StoreModel, where: { approved: true, is_active: true } },
+          { model: db.FileModel },
+          { model: db.ProductTypeModel }
+        ]
+      })
+      result = productResult
+      messages = ['get product success']
+      status = 200
+    } catch (error) {
+      result = error
+      messages = ['someting is wrong']
+      status = 400
+    }
+    res.status(status).json({ result, messages })
+  },
+
+  getPublishProducts: async (req, res, next) => {
+    let productResult, result, messages, status
+    try {
+      productResult = await db.ProductModel.findAll({
+        where: { is_sale: true },
+        include: [
+          { model: db.StoreModel, where: { approved: true, is_active: true } },
+          {
+            model: db.FileModel
+          },
+          {
+            model: db.ProductTypeModel,
+            attributes: ['type_name', 'type_code']
+          }
+        ]
+      })
+      result = productResult
+      messages = ['get product success']
+      status = 200
+    } catch (error) {
+      messages = ['someting is wrong']
+      status = 400
+      result = error
+    }
+    res.status(status).json({ result, messages })
+  },
+
   modifyProduct: async (req, res, next) => {
     let productResult,
       productTarget,
@@ -29,28 +78,33 @@ module.exports = {
         }
         try {
           productResult = await productTarget.update({
-            productTypeId: req.body.productTypeId || productTarget.productTypeId,
+            productTypeId:
+              req.body.productTypeId || productTarget.productTypeId,
             product_name: req.body.productName || productTarget.product_name,
-            product_detail: req.body.productDetail || productTarget.product_detail,
+            product_detail:
+              req.body.productDetail || productTarget.product_detail,
             sale_price: req.body.salePrice || productTarget.sale_price,
-            net_discount_price: req.body.netDiscountPrice || productTarget.net_discount_price,
-            is_sale: Number.isInteger(req.body.isSale ? 1 : 0) ? req.body.isSale : productTarget.is_sale
+            net_discount_price:
+              req.body.netDiscountPrice || productTarget.net_discount_price,
+            is_sale: Number.isInteger(req.body.isSale ? 1 : 0)
+              ? req.body.isSale
+              : productTarget.is_sale
           })
           result = productResult
           messages = ['update product success']
           status = 200
         } catch (error) {
-          messages = ['someting wrong']
+          messages = ['someting is wrong']
           status = 400
           result = error
         }
       } catch (error) {
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
         result = error
       }
     } catch (error) {
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
       result = error
     }
@@ -84,12 +138,12 @@ module.exports = {
         messages = ['get product success']
         status = 200
       } catch (error) {
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
         result = error
       }
     } catch (error) {
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
       result = error
     }
@@ -138,25 +192,26 @@ module.exports = {
             product_detail: req.body.productDetail,
             sale_price: req.body.salePrice,
             net_discount_price: req.body.netDiscountPrice,
-            is_sale: req.body.isSale
+            is_sale: req.body.isSale,
+            amount: req.body.amount
           })
           result = productResult
           messages = ['add product success']
           status = 200
         } catch (error) {
           result = error
-          messages = ['someting wrong']
+          messages = ['someting is wrong']
           status = 400
         }
       } catch (error) {
         result = error
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
         return res.status(status).json({ result, messages })
       }
     } catch (error) {
       result = error
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
     }
     res.status(status).json({ result, messages })

@@ -86,10 +86,8 @@ export default class approveStore extends Component {
         result = await serviceStore.approveStore(id);
         this.getStoreNotApprove();
         Notification(result.messages)
-        this.props.clearMessages();
       } catch (error) {
         Notification(error.messages)
-        this.props.clearMessages();
       }
     } else if (REJECT) {
       alert("coming soon");
@@ -111,7 +109,6 @@ export default class approveStore extends Component {
       this.setState({ storeList });
     } catch (error) {
       Notification(error.messages)
-      this.props.clearMessages();
     }
   }
 

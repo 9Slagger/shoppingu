@@ -13,33 +13,61 @@ module.exports = {
     return res.status(200).json({ result, messages: [] })
   },
   createUser: async (req, res, next) => {
-    let userTypeResult, userResult, result, messages
+    let transaction, userTypeResult, userResult, result, messages, status
     try {
-      userTypeResult = await db.UserTypeModel.findOne({
-        where: { role_code: '02CM' }
-      })
+      transaction = await db.sequelize.transaction()
       try {
-        const { year, month, date } = req.body.birthday
-        userResult = await db.UserModel.create({
-          email: req.body.email,
-          password: hash(req.body.password),
-          phone_number: req.body.phoneNumber,
-          first_name: req.body.firstName,
-          last_name: req.body.lastName,
-          birthday: new Date(year, month, date),
-          roleId: userTypeResult.id
+        userTypeResult = await db.RoleModel.findOne({
+          where: { role_code: '02CM' }
         })
-        result = userResult
-        return res.status(200).json({ result, messages })
+        try {
+          const { year, month, date } = req.body.birthday
+          userResult = await db.UserModel.create(
+            {
+              email: req.body.email,
+              password: hash(req.body.password),
+              phone_number: req.body.phoneNumber,
+              first_name: req.body.firstName,
+              last_name: req.body.lastName,
+              birthday: new Date(year, month, date),
+              roleId: userTypeResult.id
+            },
+            { transaction }
+          )
+          result = userResult
+          messages = ['sign up success']
+          status = 201
+          try {
+            await db.CartModel.create({ userId: userResult.id }, {transaction})
+            console.log('debug')
+            await transaction.commit()
+          } catch (error) {
+            await transaction.rollback()
+            result = error
+            messages = ['someting is wrong']
+            status = 400
+          }
+          return res.status(status).json({ result, messages })
+        } catch (error) {
+          await transaction.rollback()
+          result = error
+          messages = ['someting is wrong']
+          status = 400
+          return res.status(status).json({ result, messages })
+        }
       } catch (error) {
+        await transaction.rollback()
         result = error
-        messages = ['cannot register']
-        return res.status(200).json({ result, messages })
+        messages = ['someting is wrong']
+        status = 400
+        return res.status(status).json({ result, messages })
       }
     } catch (error) {
-      messages = ['cannot register']
-      console.log('error', error)
-      return res.status(200).json({ result, messages })
+      await transaction.rollback()
+      result = error
+      status = 400
+      messages = ['someting is wrong']
     }
+    res.status(status).json({ result, messages })
   }
 }

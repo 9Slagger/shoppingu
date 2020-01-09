@@ -9,13 +9,29 @@ export default props => {
     } else {
       return 0;
     }
-  }
-  const { product } = props;
+  };
+  const { product, history } = props;
+
+  const toPageProductView = productId => () => {
+    history.push(`/view/product/${window.btoa(productId)}`);
+  };
+
   return (
     <Card
       hoverable
-      style={{  width: "100%" }}
-      cover={<img alt="" src={product.image} />}
+      style={{ width: "100%" }}
+      cover={
+        <img
+          alt=""
+          style={{height: "130px"}}
+          src={
+            product.files && product.files.length
+              ? `http://localhost:8080/${product.files[0].id}${product.files[0].filename_extension}`
+              : "https://www.tellerreport.com/images/no-image.png"
+          }
+        />
+      }
+      onClick={toPageProductView(product.id)}
     >
       <div className="product-card">
         <label
@@ -24,17 +40,17 @@ export default props => {
             fontSize: "14px"
           }}
         >
-          <strong>{product.productName}</strong>
+          <strong>{product.product_name}</strong>
         </label>
       </div>
       <br />
       <label style={{ color: "tomato", fontSize: "16px" }}>
-        <strong>${product.netPrice}</strong>
+        <strong>฿{product.net_discount_price}</strong>
       </label>
       <br />
       <label style={{ color: "777777", fontSize: "12px" }}>
-        <s>${product.salePrice}</s>{" "}
-        {getPercent(product.netPrice, product.salePrice)}%
+        <s>฿{product.sale_price}</s>{" "}
+        {getPercent(product.net_discount_price, product.sale_price)}%
       </label>
     </Card>
   );

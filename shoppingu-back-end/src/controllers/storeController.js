@@ -30,15 +30,15 @@ module.exports = {
           ]
           status = 200
         } catch (error) {
-          messages = ['someting wrong']
+          messages = ['someting is wrong']
           status = 400
         }
       } catch (error) {
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
       }
     } catch (error) {
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
     }
     res.status(status).json({ result, messages })
@@ -105,12 +105,12 @@ module.exports = {
         status = 200
       } catch (error) {
         result = error
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
       }
     } catch (error) {
       result = error
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
     }
     res.status(status).json({ result, messages })
@@ -156,7 +156,7 @@ module.exports = {
       messages = []
       status = 200
     } catch (error) {
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
     }
     res.status(status).json({ result, messages })
@@ -206,13 +206,13 @@ module.exports = {
       } catch (error) {
         await transaction.rollback()
         result = error
-        messages = ['someting wrong']
+        messages = ['someting is wrong']
         status = 400
       }
     } catch (error) {
       await transaction.rollback()
       result = error
-      messages = ['someting wrong']
+      messages = ['someting is wrong']
       status = 400
     }
     res.status(status).json({ result, messages })

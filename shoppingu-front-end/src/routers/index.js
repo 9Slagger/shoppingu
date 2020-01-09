@@ -4,6 +4,7 @@ import { createBrowserHistory as createHistory } from "history";
 import { connect } from "react-redux";
 import PrivateRoute from "../commonComponents/PrivateRoute";
 import HomePage from "../pages/Home";
+import ProductViewPage from "../pages/ProductView";
 import SignupPage from "../pages/Signup";
 import MyCartPage from "../pages/MyCart";
 import NotFoundPage from "../pages/NotFound";
@@ -19,6 +20,7 @@ const routers = (props) => {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/view/product/:productId" component={ProductViewPage} />
         <PrivateRoute exact path="/mycart" component={MyCartPage} />
         <PrivateRoute exact path="/store/add" component={AddStorePage} />
         <PrivateRoute exact path="/mystore/list" component={StoreListPage} />

@@ -1,9 +1,11 @@
-import { combineReducers } from 'redux'
-import { connectRouter } from 'connected-react-router'
-import AuthenticationReducer from './AuthenticationReducer'
+import { combineReducers } from "redux";
+import { connectRouter } from "connected-react-router";
+import AuthenticationReducer from "./AuthenticationReducer";
+import CartRducer from "./CartRducer";
 
 export default history =>
   combineReducers({
+    router: connectRouter(history),
     Authentication: AuthenticationReducer,
-    router: connectRouter(history)
-  })
+    Cart: CartRducer
+  });

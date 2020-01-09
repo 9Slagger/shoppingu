@@ -12,7 +12,7 @@ ProductModel.init(
       }
     },
     product_detail: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(10000),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -34,6 +34,13 @@ ProductModel.init(
     },
     is_sale: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    amount: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
